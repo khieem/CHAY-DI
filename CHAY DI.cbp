@@ -45,16 +45,11 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="Character.cpp" />
 		<Unit filename="Character.h" />
-		<Unit filename="Common.cpp" />
 		<Unit filename="Common.h" />
-		<Unit filename="Curve.cpp" />
 		<Unit filename="Curve.h" />
-		<Unit filename="ImprovedPerlinNoise.cpp" />
 		<Unit filename="ImprovedPerlinNoise.h" />
 		<Unit filename="MAIAN.TTF" />
-		<Unit filename="VertexDeque.cpp" />
 		<Unit filename="VertexDeque.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="openal32.dll" />
