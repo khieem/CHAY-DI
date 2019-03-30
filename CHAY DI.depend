@@ -1,6 +1,11 @@
 # depslib dependency file v1.0
-1553266051 source:d:\c++\chay di\main.cpp
+1553925597 source:d:\c++\chay di\main.cpp
+	"Character.h"
+	"Curve.h"
+	"ImprovedPerlinNoise.h"
 	<SFML/Graphics.hpp>
+	<iostream>
+	<time.h>
 
 1525812018 d:\c++\sfml-2.5.1\include\sfml\graphics.hpp
 	<SFML/Window.hpp>
@@ -410,4 +415,50 @@
 	<SFML/Graphics/PrimitiveType.hpp>
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Window/GlResource.hpp>
+
+1553924379 source:d:\c++\chay di\character.cpp
+	"Character.h"
+	"Common.h"
+	<SFML/Graphics/RenderTarget.hpp>
+
+1553922011 d:\c++\chay di\character.h
+	"Curve.h"
+	<SFML/Graphics/Drawable.hpp>
+	<SFML/Graphics/Shape.hpp>
+
+1553922011 d:\c++\chay di\curve.h
+	"VertexDeque.h"
+	<SFML/Graphics/Drawable.hpp>
+	<SFML/Graphics/View.hpp>
+	<functional>
+
+1553922011 d:\c++\chay di\vertexdeque.h
+	<SFML/Graphics/Drawable.hpp>
+	<SFML/Graphics/PrimitiveType.hpp>
+	<SFML/Graphics/Vertex.hpp>
+
+1553922011 d:\c++\chay di\common.h
+	<SFML/System/Vector2.hpp>
+
+1553922011 source:d:\c++\chay di\common.cpp
+	"Common.h"
+	<cmath>
+
+1553924781 source:d:\c++\chay di\curve.cpp
+	"Curve.h"
+	<SFML/Graphics/RenderTarget.hpp>
+
+1553922011 source:d:\c++\chay di\improvedperlinnoise.cpp
+	"ImprovedPerlinNoise.h"
+	<cmath>
+
+1553922166 d:\c++\chay di\improvedperlinnoise.h
+	<algorithm>
+	<array>
+	<numeric>
+
+1553922011 source:d:\c++\chay di\vertexdeque.cpp
+	"VertexDeque.h"
+	<SFML/Graphics/RenderTarget.hpp>
+	<algorithm>
 

@@ -1,13 +1,77 @@
+#include "Character.h"
+#include "Curve.h"
+#include "ImprovedPerlinNoise.h"
 #include <SFML/Graphics.hpp>
+//#include <algorithm>
 #include <iostream>
+#include <time.h>
 
 int main()
 {
-    std::cout << "Hello";
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    //sf::ContextSettings contextSettings;
+    //contextSettings.antialiasingLevel = 8;
+    //khoi tao cua so
+    sf::RenderWindow window(sf::VideoMode(800, 500), "Infinite Curve");
+    window.setFramerateLimit(60);
 
+    ImprovedPerlinNoise noiseGen;
+    // seed `noiseGen`
+    //using namespace std::chrono;
+    srand(time(NULL));
+    int seed = rand()%100000;/*duration_cast<duration<unsigned>>(
+                    system_clock::now().time_since_epoch())
+                    .count();*/
+    seed = 13217;
+    //noiseGen.shuffle(std::mt19937{seed});
+    auto yGen = [&](float x) {
+        const float xScale = 2e-3f;
+        const float yMagnitude1 = 20;
+        const float yMagnitude2 = 130;
+        const float yMagnitude3 = 60;
+        const float yMagnitude4 = 50;
+
+        const float xScaled = x * xScale;
+        return float(yMagnitude1 * noiseGen.noise(xScaled * 0) +
+                     yMagnitude2 * noiseGen.noise(xScaled * 1) +
+                     yMagnitude3 * noiseGen.noise(xScaled * 0) +
+                     yMagnitude4 * noiseGen.noise(xScaled * 1));
+    };
+
+    Curve curve{5.f, window.getSize().x, yGen};
+    sf::RectangleShape shape{{20, 30}};
+    shape.setFillColor(sf::Color::Red);
+    shape.setOrigin(10, 30);
+    Character character{shape, curve};
+
+    sf::View view = window.getView();
+    view.setCenter(-5, 5);
+    curve.syncWithView(view);
+
+    sf::Font font;
+    if (!font.loadFromFile("MAIAN.ttf"))
+    {
+        std::cerr << "Cannot open HelvetiPixel.ttf\n";
+        return 1;
+    }
+    sf::Text seedText{"Seed: " + std::to_string(seed), font, 16};
+    seedText.setPosition(0, 0);
+    seedText.setFillColor(sf::Color::Black);
+    sf::Text moveSpeedText{
+        "Move speed: " + std::to_string(character.getMoveSpeed()), font, 16};
+    moveSpeedText.setPosition(0, 16);
+    moveSpeedText.setFillColor(sf::Color::Black);
+    sf::Text curvePointsText{
+        "Curve points: " + std::to_string(curve.getPointsCount()), font, 16};
+    curvePointsText.setPosition(0, 32);
+    curvePointsText.setFillColor(sf::Color::Black);
+    sf::Text positionText{
+        "Position: " + std::to_string(character.getPosition().x) + ", " +
+            std::to_string(character.getPosition().y),
+        font, 16};
+    positionText.setPosition(0, 48);
+    positionText.setFillColor(sf::Color::Black);
+
+    sf::Clock clock;
     while (window.isOpen())
     {
         sf::Event event;
@@ -15,12 +79,51 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+            else if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Up)
+                {
+                    character.addMoveSpeed(10.f);
+                    moveSpeedText.setString(
+                        "Move speed: " +
+                        std::to_string(character.getMoveSpeed()));
+                }
+                else if (event.key.code == sf::Keyboard::Down)
+                {
+                    character.addMoveSpeed(-10.f);
+                    moveSpeedText.setString(
+                        "Move speed: " +
+                        std::to_string(character.getMoveSpeed()));
+                }
+            }
         }
 
-        window.clear();
-        window.draw(shape);
+        sf::Time elapsed = clock.restart();
+        float moveAmount = 0;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            moveAmount += character.getMoveSpeed() * elapsed.asSeconds();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            moveAmount -= character.getMoveSpeed() * elapsed.asSeconds();
+        if (moveAmount != 0)
+        {
+            view.move(character.move(moveAmount));
+            curve.syncWithView(view);
+            curvePointsText.setString("Curve points: " +
+                                      std::to_string(curve.getPointsCount()));
+            positionText.setString(
+                "Position: " + std::to_string(character.getPosition().x) +
+                ", " + std::to_string(character.getPosition().y));
+        }
+
+        window.setView(view);
+        window.clear(sf::Color::White);
+        window.draw(curve);
+        window.draw(character);
+        window.setView(window.getDefaultView());
+        window.draw(seedText);
+        window.draw(moveSpeedText);
+        window.draw(curvePointsText);
+        window.draw(positionText);
         window.display();
     }
-
-    return 0;
 }
