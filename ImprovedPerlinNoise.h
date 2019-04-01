@@ -11,19 +11,23 @@
 #include <cmath>
 #include <numeric>
 
-class ImprovedPerlinNoise
-{
+class ImprovedPerlinNoise {
 public:
-    double noise(double x, double y = 0, double z = 0) const
-    {
-        int X = (int)std::floor(x) & 255, Y = (int)std::floor(y) & 255,
+    double noise(double x, double y = 0, double z = 0) const {
+        int X = (int)std::floor(x) & 255,
+            Y = (int)std::floor(y) & 255,
             Z = (int)std::floor(z) & 255;
         x -= std::floor(x);
         y -= std::floor(y);
         z -= std::floor(z);
+
         double u = fade(x), v = fade(y), w = fade(z);
-        int A = int(p[X] + Y), AA = int(p[A] + Z), AB = int(p[A + 1] + Z),
-            B = int(p[X + 1] + Y), BA = int(p[B] + Z), BB = int(p[B + 1] + Z);
+        int A = int(p[X] + Y),
+            AA = int(p[A] + Z),
+            AB = int(p[A + 1] + Z),
+            B = int(p[X + 1] + Y),
+            BA = int(p[B] + Z),
+            BB = int(p[B + 1] + Z);
 
         return lerp(
             w,
@@ -39,33 +43,29 @@ public:
     }
 
     template <class PRNG>
-    void shuffle(PRNG&& prng)
-    {
+    void shuffle(PRNG&& prng) {
         std::iota(begin(p), end(p), 0);
         std::shuffle(begin(p), begin(p) + 256, prng);
         std::copy(begin(p), begin(p) + 256, begin(p) + 256);
     }
 
 private:
-    double fade(double t) const
-    {
+    double fade(double t) const {
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
-    double lerp(double t, double a, double b) const
-    {
+    double lerp(double t, double a, double b) const {
         return a + t * (b - a);
     }
 
-    double grad(int hash, double x, double y, double z) const
-    {
+    double grad(int hash, double x, double y, double z) const {
         int h = hash & 15;
         double u = h < 8 ? x : y, v = h < 4 ? y : h == 12 || h == 14 ? x : z;
         return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
     }
 
-private:
-    std::vector<int> p{
+
+    std::vector<int> p {
         151, 160, 137, 91,  90,  15,  131, 13,  201, 95,  96,  53,  194, 233,
         7,   225, 140, 36,  103, 30,  69,  142, 8,   99,  37,  240, 21,  10,
         23,  190, 6,   148, 247, 120, 234, 75,  0,   26,  197, 62,  94,  252,
@@ -103,6 +103,10 @@ private:
         145, 235, 249, 14,  239, 107, 49,  192, 214, 31,  181, 199, 106, 157,
         184, 84,  204, 176, 115, 121, 50,  45,  127, 4,   150, 254, 138, 236,
         205, 93,  222, 114, 67,  29,  24,  72,  243, 141, 128, 195, 78,  66,
-        215, 61,  156, 180
+        215, 61,  156, 180, 39,  213, 9,   48,   58, 198, 1,   168, 68,  175, 74,  165, 71,  134, 139, 48,
+        27,  166, 77,  146, 158, 231, 83,  111, 229, 122, 60,  211, 133, 230,
+        220, 105, 92,  41,  55,  46,  245, 40,  244, 102, 143, 54,  65,  25,
+        63,  161, 1,   216, 80,  73,  209, 76,  132, 187, 208, 89,  18,  169,
+        200, 196, 135, 130, 116, 188, 159
     };
 };

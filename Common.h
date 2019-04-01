@@ -2,14 +2,13 @@
 
 #include <SFML/System/Vector2.hpp>
 
-namespace math
-{
-const double pi = 3.14159265358979323846;
-const double deg_per_rad = 180 / pi;
-const double rad_per_dec = pi / 180;
+namespace math {
+	const double pi = 3.14159265358979323846;
+	const double deg_per_rad = 180 / pi;
+	const double rad_per_dec = pi / 180;
 } // namespace math
 
-float distance(const sf::Vector2f& a, const sf::Vector2f& b){
+float distance(const sf::Vector2f& a, const sf::Vector2f& b) {
     auto d = b - a;
     return std::sqrt(d.x * d.x + d.y * d.y);
 }
