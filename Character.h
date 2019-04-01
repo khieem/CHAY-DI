@@ -10,12 +10,12 @@
 class Character : public sf::Drawable
 {
 public:
-    Character(sf::Shape& shape, const Curve& curve, float moveSpeed = 300.f)
+    Character(sf::Shape& shape, const Curve& curve, float moveSpeed = 70.f)
     : shape(shape),
       moveSpeed(moveSpeed),
       curve(curve),
-      segmentIndex{0},
-      segmentPercentage{0}
+      segmentIndex(0),
+      segmentPercentage(0)
     {
         shape.setPosition(curve[0]);
         fixRotation();
@@ -69,7 +69,8 @@ public:
     void fixRotation() {
         auto const& a = curve[segmentIndex];
         auto const& b = curve[segmentIndex + 1];
-        shape.setRotation(angleSlope(a, b));
+        angle = angleSlope(a, b);
+        shape.setRotation(angle);
     }
 
     void addMoveSpeed(float amount) {
@@ -85,12 +86,17 @@ public:
         return shape.getPosition();
     }
 
+    double getAngle() const {
+        return angle;
+    }
+
 private:
     sf::Shape& shape;
     float moveSpeed;
     const Curve& curve;
     int segmentIndex;
     float segmentPercentage;
+    double angle;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
         target.draw(shape, states);

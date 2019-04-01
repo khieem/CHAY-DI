@@ -11,8 +11,8 @@ int main() {
 
     //initialize properties for the curve
     ImprovedPerlinNoise noiseGen;
-    int seed = 13217;
-    seed = 472;
+//    int seed = 13217;
+//    seed = 472;
     auto yGen = [&](float x) {
         const float xScale = 2e-3f;
         const float yMagnitude1 = 20;
@@ -27,17 +27,22 @@ int main() {
                      yMagnitude4 * noiseGen.noise(xScaled * 1));
     };
 
-    //create the in-sight curve with the properties initialzed
+    //create the in-sight curve with the properties initialized
     Curve curve(5.f, window.getSize().x, yGen);
 
-    //initialize character
+    ////INITIALIZE CHARACTER
+    //determine if our character is upside-down or not
+    bool yOriginUp = true;
+    int yOrigin = 30;
     sf::RectangleShape shape({20, 30});
     shape.setFillColor(sf::Color::Red);
-    shape.setOrigin(10, 30);
+    //create a bool allows our character to flip by toggling
+    //between 30 and 0 in main loop
+    shape.setOrigin(10, yOrigin);
     Character character(shape, curve);
 
     sf::View view = window.getView();
-    view.setCenter(-5, 5);
+    view.setCenter(0, 0);
     curve.syncWithView(view);
 
     //load font
@@ -68,16 +73,31 @@ int main() {
     sf::Clock clock;
     //main loop
     while (window.isOpen()) {
+        ///////FLIP CHARACTER
+        yOrigin = (yOriginUp ? 30 : 0);
+        shape.setOrigin(10, yOrigin);
+
         ///////MOVE CHARACTER
+        //game's special logic
+        if (character.getAngle() > 0) {
+            if (yOriginUp == true)
+                character.addMoveSpeed(1.d);
+            else character.addMoveSpeed(-1.d);
+        }
+        else {
+            if (yOriginUp == true)
+                character.addMoveSpeed(-1.d);
+            else character.addMoveSpeed(1.d);
+        } //end if
+
         sf::Time elapsed = clock.restart();
         float moveAmount = 0;
         //calculate the distance which character moves after every loop
         moveAmount += character.getMoveSpeed() * elapsed.asSeconds();
         //most important statement! makes player feel like character is moving
         view.move(character.move(moveAmount));
-        //create continuous curve as character moves
+        //generate continuous curve as character moves
         curve.syncWithView(view);
-        ///////END MOVING CHARACTER
 
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -87,8 +107,8 @@ int main() {
             //if player presses any button
             else if (event.type == sf::Event::KeyPressed) {
                 //flip character
-                std::cout << "FLIP!\n";
-            }
+                yOriginUp = !yOriginUp;
+            } // end if
 //            else if (event.type == sf::Event::KeyPressed)
 //            {
 //                if (event.key.code == sf::Keyboard::Up)
@@ -126,7 +146,7 @@ int main() {
 //        }
 
         window.setView(view);
-        window.clear(sf::Color::White);
+        window.clear(sf::Color(53, 49, 74));
         window.draw(curve);
         window.draw(character);
         window.setView(window.getDefaultView());

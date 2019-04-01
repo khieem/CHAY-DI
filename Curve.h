@@ -18,7 +18,7 @@ public:
     {
         for (int i = 0; i < lines.getVertexCount(); ++i) {
             lines[i].position = sf::Vector2f{i * xStep, yGen(i * xStep)};
-            lines[i].color = sf::Color::Black;
+            lines[i].color = sf::Color::White;
         }
     }
 
@@ -33,14 +33,14 @@ public:
         while (lines[lines.getVertexCount() - 1].position.x < right) {
             float x = lines[lines.getVertexCount() - 1].position.x + xStep;
             float y = yGen(x);
-            lines.append(sf::Vertex{sf::Vector2f{x, y}, sf::Color::Black});
+            lines.append(sf::Vertex{sf::Vector2f{x, y}, sf::Color::White});
             // doesn't affect indexOffset
         }
         // Prepend more points
         while (lines[0].position.x > left) {
             float x = lines[0].position.x - xStep;
             float y = yGen(x);
-            lines.prepend(sf::Vertex{sf::Vector2f{x, y}, sf::Color::Black});
+            lines.prepend(sf::Vertex{sf::Vector2f{x, y}, sf::Color::White});
             indexOffset--;
         }
         // Trim right points
