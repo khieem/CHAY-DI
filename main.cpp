@@ -6,7 +6,7 @@
 
 int main() {
     //render window
-    sf::RenderWindow window(sf::VideoMode(800, 500), "Infinite Curve");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "CHAY DI!!!");
     window.setFramerateLimit(60);
 
     //initialize properties for the curve
@@ -32,9 +32,9 @@ int main() {
 
     ////INITIALIZE CHARACTER
     //determine if our character is upside-down or not
-    bool yOriginUp = true;
+    bool characterUp = true;
     int yOrigin = 30;
-    sf::RectangleShape shape({20, 30});
+    sf::RectangleShape shape(sf::Vector2f(20, 30));
     shape.setFillColor(sf::Color::Red);
     //create a bool allows our character to flip by toggling
     //between 30 and 0 in main loop
@@ -42,7 +42,8 @@ int main() {
     Character character(shape, curve);
 
     sf::View view = window.getView();
-    view.setCenter(0, 0);
+    view.setCenter(120, 0);
+    //view.zoom(2);
     curve.syncWithView(view);
 
     //load font
@@ -59,33 +60,33 @@ int main() {
 //        "Move speed: " + std::to_string(character.getMoveSpeed()), font, 16);
 //    moveSpeedText.setPosition(0, 16);
 //    moveSpeedText.setFillColor(sf::Color::Black);
-//    sf::Text curvePointsText{
-//        "Curve points: " + std::to_string(curve.getPointsCount()), font, 16};
-//    curvePointsText.setPosition(0, 32);
-//    curvePointsText.setFillColor(sf::Color::Black);
-//    sf::Text positionText{
-//        "Position: " + std::to_string(character.getPosition().x) + ", " +
-//            std::to_string(character.getPosition().y),
-//        font, 16};
-//    positionText.setPosition(0, 48);
-//    positionText.setFillColor(sf::Color::Black);
+   // sf::Text curvePointsText{
+   //     "Curve points: " + std::to_string(curve.getPointsCount()), font, 16};
+   // curvePointsText.setPosition(0, 32);
+   // curvePointsText.setFillColor(sf::Color::Black);
+   // sf::Text positionText{
+   //     "Position: " + std::to_string(character.getPosition().x) + ", " +
+   //         std::to_string(character.getPosition().y),
+   //     font, 16};
+   // positionText.setPosition(0, 48);
+   // positionText.setFillColor(sf::Color::Black);
 
     sf::Clock clock;
     //main loop
     while (window.isOpen()) {
         ///////FLIP CHARACTER
-        yOrigin = (yOriginUp ? 30 : 0);
+        yOrigin = (characterUp ? 30 : 0);
         shape.setOrigin(10, yOrigin);
 
         ///////MOVE CHARACTER
         //game's special logic
         if (character.getAngle() > 0) {
-            if (yOriginUp == true)
+            if (characterUp == true)
                 character.addMoveSpeed(1.d);
             else character.addMoveSpeed(-1.d);
         }
         else {
-            if (yOriginUp == true)
+            if (characterUp == true)
                 character.addMoveSpeed(-1.d);
             else character.addMoveSpeed(1.d);
         } //end if
@@ -107,7 +108,7 @@ int main() {
             //if player presses any button
             else if (event.type == sf::Event::KeyPressed) {
                 //flip character
-                yOriginUp = !yOriginUp;
+                characterUp = !characterUp;
             } // end if
 //            else if (event.type == sf::Event::KeyPressed)
 //            {
@@ -138,11 +139,11 @@ int main() {
 //        {
 //            view.move(character.move(moveAmount));
 //            curve.syncWithView(view);
-//            curvePointsText.setString("Curve points: " +
-//                                      std::to_string(curve.getPointsCount()));
-//            positionText.setString(
-//                "Position: " + std::to_string(character.getPosition().x) +
-//                ", " + std::to_string(character.getPosition().y));
+           // curvePointsText.setString("Curve points: " +
+           //                           std::to_string(curve.getPointsCount()));
+           // positionText.setString(
+           //     "Position: " + std::to_string(character.getPosition().x) +
+           //     ", " + std::to_string(character.getPosition().y));
 //        }
 
         window.setView(view);
@@ -152,8 +153,8 @@ int main() {
         window.setView(window.getDefaultView());
 //        window.draw(seedText);
 //        window.draw(moveSpeedText);
-//        window.draw(curvePointsText);
-//        window.draw(positionText);
+//       window.draw(curvePointsText);
+        // window.draw(positionText);
         window.display();
     }//end main loop
 }
