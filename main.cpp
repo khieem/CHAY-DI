@@ -41,6 +41,12 @@ int main() {
     shape.setOrigin(10, yOrigin);
     Character character(shape, curve);
 
+    sf::RectangleShape shape1;
+    shape1.setFillColor(sf::Color::Red);
+    shape1.setOrigin(10, 30);
+    Obstacle obstacle1(shape1, curve);
+    bool obstacle1Used = false;
+
     sf::View view = window.getView();
     view.setCenter(120, 0);
     //view.zoom(2);
@@ -100,6 +106,15 @@ int main() {
         //generate continuous curve as character moves
         curve.syncWithView(view);
 
+        if (obstacle1Used == false && character.getMoveSpeed() > 200.f) {
+//            sf::RectangleShape shape1(sf::Vector2f(30, 30));
+//            shape1.setFillColor(sf::Color::Red);
+            shape1.setSize(sf::Vector2f(30, 20));
+            shape1.setPosition(curve.getXAppend(), curve.getYAppend());
+            obstacle1Used = true;
+//            Character obstacle1(shape1, curve);
+        }
+
         sf::Event event;
         while (window.pollEvent(event)) {
             //close the window
@@ -150,6 +165,7 @@ int main() {
         window.clear(sf::Color(53, 49, 74));
         window.draw(curve);
         window.draw(character);
+        window.draw(obstacle1);
         window.setView(window.getDefaultView());
 //        window.draw(seedText);
 //        window.draw(moveSpeedText);

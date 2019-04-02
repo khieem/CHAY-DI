@@ -31,9 +31,9 @@ public:
         float right = view.getCenter().x + view.getSize().x / 2;
         // Append more points
         while (lines[lines.getVertexCount() - 1].position.x < right) {
-            float x = lines[lines.getVertexCount() - 1].position.x + xStep;
-            float y = yGen(x);
-            lines.append(sf::Vertex{sf::Vector2f{x, y}, sf::Color::White});
+            xAppend = lines[lines.getVertexCount() - 1].position.x + xStep;
+            yAppend = yGen(xAppend);
+            lines.append(sf::Vertex(sf::Vector2f(xAppend, yAppend), sf::Color::White));
             // doesn't affect indexOffset
         }
         // Prepend more points
@@ -59,11 +59,21 @@ public:
         return lines.getVertexCount();
     }
 
+    double getXAppend() const {
+        return xAppend;
+    }
+
+    double getYAppend() const {
+        return yAppend;
+    }
+
 private:
     float xStep;
     VertexContiguousDeque lines;
     int indexOffset;
     std::function<float(float)> yGen;
+    double xAppend; //point appended to the right's x
+    double yAppend; //point appended to the right's y
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
         target.draw(lines, states);

@@ -46,10 +46,13 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="Character.h" />
+		<Unit filename="Collision.cpp" />
+		<Unit filename="Collision.h" />
 		<Unit filename="Common.h" />
 		<Unit filename="Curve.h" />
 		<Unit filename="ImprovedPerlinNoise.h" />
 		<Unit filename="MAIAN.TTF" />
+		<Unit filename="Obstacle.h" />
 		<Unit filename="VertexDeque.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="openal32.dll" />
