@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Curve.h"
-#include "Character.h"
 #include "Common.h"
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Shape.hpp>
@@ -73,7 +72,7 @@ public:
         shape.setRotation(angle);
     }
 
-    void addMoveSpeed(float amount) {
+    void addMoveSpeed(const float& amount) {
         moveSpeed += amount;
         if (moveSpeed < 0) moveSpeed = 0;
     }
@@ -86,7 +85,7 @@ public:
         return shape.getPosition();
     }
 
-    double getAngle() const {
+    float getAngle() const {
         return angle;
     }
 
@@ -96,7 +95,7 @@ private:
     const Curve& curve;
     int segmentIndex;
     float segmentPercentage;
-    double angle;
+    float angle;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
         target.draw(shape, states);

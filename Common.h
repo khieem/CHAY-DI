@@ -13,7 +13,7 @@ float distance(const sf::Vector2f& a, const sf::Vector2f& b) {
     return std::sqrt(d.x * d.x + d.y * d.y);
 }
 
-sf::Vector2f lerp(const sf::Vector2f& a, const sf::Vector2f& b, float percentage) {
+sf::Vector2f lerp(const sf::Vector2f& a, const sf::Vector2f& b, const float& percentage) {
 	return (1 - percentage) * a + percentage * b;
 }
 

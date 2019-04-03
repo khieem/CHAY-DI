@@ -34,6 +34,8 @@ public:
             xAppend = lines[lines.getVertexCount() - 1].position.x + xStep;
             yAppend = yGen(xAppend);
             lines.append(sf::Vertex(sf::Vector2f(xAppend, yAppend), sf::Color::White));
+            xAppendNext = lines[lines.getVertexCount() - 1].position.x + xStep;
+            yAppendNext = yGen(xAppendNext);
             // doesn't affect indexOffset
         }
         // Prepend more points
@@ -59,12 +61,20 @@ public:
         return lines.getVertexCount();
     }
 
-    double getXAppend() const {
+    float getXAppend() const {
         return xAppend;
     }
 
-    double getYAppend() const {
+    float getYAppend() const {
         return yAppend;
+    }
+
+    float getXAppendNext() const {
+        return xAppendNext;
+    }
+
+    float getYAppendNext() const {
+        return yAppendNext;
     }
 
 private:
@@ -72,8 +82,10 @@ private:
     VertexContiguousDeque lines;
     int indexOffset;
     std::function<float(float)> yGen;
-    double xAppend; //point appended to the right's x
-    double yAppend; //point appended to the right's y
+    float xAppend, //point appended to the right's x
+           yAppend, //point appended to the right's y
+           xAppendNext, //created to setRotation of obstacles
+           yAppendNext;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
         target.draw(lines, states);

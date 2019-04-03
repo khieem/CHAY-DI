@@ -88,8 +88,6 @@ public:
     }
 
 private:
-
-
     sf::Vertex* mPtr = nullptr;
     size_t mSize = 0;
     size_t mSpaceFront = 0;

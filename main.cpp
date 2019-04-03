@@ -1,7 +1,9 @@
 #include "Character.h"
 #include "Curve.h"
+#include "Obstacle.h"
 #include "ImprovedPerlinNoise.h"
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include <iostream>
 
 int main() {
@@ -34,22 +36,24 @@ int main() {
     //determine if our character is upside-down or not
     bool characterUp = true;
     int yOrigin = 30;
-    sf::RectangleShape shape(sf::Vector2f(20, 30));
-    shape.setFillColor(sf::Color::Red);
+    sf::RectangleShape shape(sf::Vector2f(20.f, 30.f));
+    shape.setFillColor(sf::Color(68, 196, 164));
     //create a bool allows our character to flip by toggling
     //between 30 and 0 in main loop
     shape.setOrigin(10, yOrigin);
     Character character(shape, curve);
 
-    sf::RectangleShape shape1;
-    shape1.setFillColor(sf::Color::Red);
-    shape1.setOrigin(10, 30);
-    Obstacle obstacle1(shape1, curve);
+    ////OBSTACLE
+    sf::Vector2f position, positionNext;
+    sf::RectangleShape shape1(sf::Vector2f(50.f, 50.f));
+    shape1.setFillColor(sf::Color(249, 135, 82));
+    shape1.setOrigin(50, 25);
+
+    Obstacle obstacle1(shape1, position, positionNext);
     bool obstacle1Used = false;
 
     sf::View view = window.getView();
     view.setCenter(120, 0);
-    //view.zoom(2);
     curve.syncWithView(view);
 
     //load font
@@ -80,6 +84,7 @@ int main() {
     sf::Clock clock;
     //main loop
     while (window.isOpen()) {
+        window.clear(sf::Color(53, 49, 74));
         ///////FLIP CHARACTER
         yOrigin = (characterUp ? 30 : 0);
         shape.setOrigin(10, yOrigin);
@@ -88,31 +93,28 @@ int main() {
         //game's special logic
         if (character.getAngle() > 0) {
             if (characterUp == true)
-                character.addMoveSpeed(1.d);
-            else character.addMoveSpeed(-1.d);
+                character.addMoveSpeed(1.f);
+            else character.addMoveSpeed(-1.f);
         }
         else {
             if (characterUp == true)
-                character.addMoveSpeed(-1.d);
-            else character.addMoveSpeed(1.d);
+                character.addMoveSpeed(-1.f);
+            else character.addMoveSpeed(1.f);
         } //end if
 
         sf::Time elapsed = clock.restart();
         float moveAmount = 0;
-        //calculate the distance which character moves after every loop
         moveAmount += character.getMoveSpeed() * elapsed.asSeconds();
         //most important statement! makes player feel like character is moving
         view.move(character.move(moveAmount));
         //generate continuous curve as character moves
         curve.syncWithView(view);
 
-        if (obstacle1Used == false && character.getMoveSpeed() > 200.f) {
-//            sf::RectangleShape shape1(sf::Vector2f(30, 30));
-//            shape1.setFillColor(sf::Color::Red);
-            shape1.setSize(sf::Vector2f(30, 20));
-            shape1.setPosition(curve.getXAppend(), curve.getYAppend());
+        if (obstacle1Used == false && character.getMoveSpeed() > 100.f) {
+            position     = {curve.getXAppend(), curve.getYAppend()};
+            positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
+            Obstacle obstacles1(shape1, position, positionNext);
             obstacle1Used = true;
-//            Character obstacle1(shape1, curve);
         }
 
         sf::Event event;
@@ -162,15 +164,10 @@ int main() {
 //        }
 
         window.setView(view);
-        window.clear(sf::Color(53, 49, 74));
         window.draw(curve);
         window.draw(character);
         window.draw(obstacle1);
         window.setView(window.getDefaultView());
-//        window.draw(seedText);
-//        window.draw(moveSpeedText);
-//       window.draw(curvePointsText);
-        // window.draw(positionText);
         window.display();
     }//end main loop
 }
