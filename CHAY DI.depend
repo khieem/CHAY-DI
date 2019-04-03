@@ -467,29 +467,29 @@
 	"Common.h"
 	<SFML/Graphics/RenderTarget.hpp>
 
-1554220595 d:\c++\chay-di\character.h
+1554298281 d:\c++\chay-di\character.h
 	"Curve.h"
+	"Character.h"
 	"Common.h"
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Graphics/Shape.hpp>
 	<SFML/Graphics/RenderTarget.hpp>
 
-1554218591 d:\c++\chay-di\curve.h
+1554298281 d:\c++\chay-di\curve.h
 	"VertexDeque.h"
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Graphics/View.hpp>
 	<SFML/Graphics/RenderTarget.hpp>
 	<functional>
-	<iostream>
 
-1554217026 d:\c++\chay-di\vertexdeque.h
+1554298281 d:\c++\chay-di\vertexdeque.h
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Graphics/PrimitiveType.hpp>
 	<SFML/Graphics/Vertex.hpp>
 	<SFML/Graphics/RenderTarget.hpp>
 	<algorithm>
 
-1554221065 d:\c++\chay-di\common.h
+1554298281 d:\c++\chay-di\common.h
 	<SFML/System/Vector2.hpp>
 
 1553926815 source:d:\c++\chay-di\common.cpp
@@ -504,16 +504,15 @@
 	"ImprovedPerlinNoise.h"
 	<cmath>
 
-1554217026 d:\c++\chay-di\improvedperlinnoise.h
+1554298281 d:\c++\chay-di\improvedperlinnoise.h
 	<algorithm>
 	<array>
 	<cmath>
 	<numeric>
 
-1554220713 source:d:\c++\chay-di\main.cpp
+1554298281 source:d:\c++\chay-di\main.cpp
 	"Character.h"
 	"Curve.h"
-	"Obstacle.h"
 	"ImprovedPerlinNoise.h"
 	<SFML/Graphics.hpp>
 	<iostream>
