@@ -3,12 +3,11 @@
 #include "Obstacle.h"
 #include "ImprovedPerlinNoise.h"
 #include <SFML/Graphics.hpp>
-#include <vector>
 #include <iostream>
 
 int main() {
     //render window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "CHAY DI!!!");
+    sf::RenderWindow window(sf::VideoMode(800, 500), "CHAY DI!!!");
     window.setFramerateLimit(60);
 
     //initialize properties for the curve
@@ -35,22 +34,31 @@ int main() {
     ////INITIALIZE CHARACTER
     //determine if our character is upside-down or not
     bool characterUp = true;
-    int yOrigin = 30;
-    sf::RectangleShape shape(sf::Vector2f(20.f, 30.f));
+    int yOrigin = 50;
+    sf::RectangleShape shape(sf::Vector2f(30.f, 50.f));
     shape.setFillColor(sf::Color(68, 196, 164));
     //create a bool allows our character to flip by toggling
-    //between 30 and 0 in main loop
-    shape.setOrigin(10, yOrigin);
+    //between 50 and 0 in main loop
     Character character(shape, curve);
 
     ////OBSTACLE
     sf::Vector2f position, positionNext;
-    sf::RectangleShape shape1(sf::Vector2f(50.f, 50.f));
-    shape1.setFillColor(sf::Color(249, 135, 82));
-    shape1.setOrigin(50, 25);
+    sf::RectangleShape obstacleShape1(sf::Vector2f(50.f, 50.f));
+    obstacleShape1.setFillColor(sf::Color::Red);
+    sf::RectangleShape obstacleShape2(sf::Vector2f(50.f, 50.f));
+    obstacleShape2.setFillColor(sf::Color::Yellow);
+    sf::RectangleShape obstacleShape3(sf::Vector2f(50.f, 50.f));
+    obstacleShape3.setFillColor(sf::Color::Green);
 
-    Obstacle obstacle1(shape1, position, positionNext);
-    bool obstacle1Used = false;
+    Obstacle obstacle1(obstacleShape1, position, positionNext),
+             obstacle2(obstacleShape2, position, positionNext),
+             obstacle3(obstacleShape3, position, positionNext);
+    obstacle1.setSpeedThreshold(300.f);
+    obstacle2.setSpeedThreshold(500.f);
+    obstacle3.setSpeedThreshold(600.f);
+
+    ////CLOCK
+    long int clock1 = 0, clock2 = 0, clock3 = 0, clock4 = 0, clock5 = 0, clock6 = 0, clock7 = 0;
 
     sf::View view = window.getView();
     view.setCenter(120, 0);
@@ -66,10 +74,10 @@ int main() {
 //    sf::Text seedText("Seed: " + std::to_string(seed), font, 1);
 //    seedText.setPosition(0, 0);
 //    seedText.setFillColor(sf::Color::Black);
-//    sf::Text moveSpeedText(
-//        "Move speed: " + std::to_string(character.getMoveSpeed()), font, 16);
-//    moveSpeedText.setPosition(0, 16);
-//    moveSpeedText.setFillColor(sf::Color::Black);
+   // sf::Text moveSpeedText(
+   //     "Move speed: " + std::to_string(character.getMoveSpeed()), font, 16);
+   // moveSpeedText.setPosition(0, 16);
+   // moveSpeedText.setFillColor(sf::Color::Black);
    // sf::Text curvePointsText{
    //     "Curve points: " + std::to_string(curve.getPointsCount()), font, 16};
    // curvePointsText.setPosition(0, 32);
@@ -86,15 +94,15 @@ int main() {
     while (window.isOpen()) {
         window.clear(sf::Color(53, 49, 74));
         ///////FLIP CHARACTER
-        yOrigin = (characterUp ? 30 : 0);
-        shape.setOrigin(10, yOrigin);
+        yOrigin = (characterUp ? 50 : 0);
+        shape.setOrigin(15, yOrigin);
 
         ///////MOVE CHARACTER
         //game's special logic
         if (character.getAngle() > 0) {
             if (characterUp == true)
-                character.addMoveSpeed(1.f);
-            else character.addMoveSpeed(-1.f);
+                character.addMoveSpeed(1);
+            else character.addMoveSpeed(1);
         }
         else {
             if (characterUp == true)
@@ -110,11 +118,46 @@ int main() {
         //generate continuous curve as character moves
         curve.syncWithView(view);
 
-        if (obstacle1Used == false && character.getMoveSpeed() > 100.f) {
+        if (obstacle1.isUsed == false && character.getMoveSpeed() > obstacle1.getSpeedThreshold()) {
             position     = {curve.getXAppend(), curve.getYAppend()};
             positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
-            Obstacle obstacles1(shape1, position, positionNext);
-            obstacle1Used = true;
+            Obstacle obstacles1(obstacleShape1, position, positionNext);
+            obstacle1.isUsed = true;
+        }
+
+        if (obstacle1.isUsed)
+            ++clock1;
+        if (clock1 == 189) {
+                obstacle1.isUsed = false;
+                clock1 = 0;
+        }
+
+        if (obstacle2.isUsed == false && character.getMoveSpeed() > obstacle2.getSpeedThreshold()) {
+            position     = {curve.getXAppend(), curve.getYAppend()};
+            positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
+            Obstacle obstacles2(obstacleShape2, position, positionNext);
+            obstacle2.isUsed = true;
+        }
+
+        if (obstacle2.isUsed)
+            ++clock2;
+        if (clock2 == 289) {
+                obstacle2.isUsed = false;
+                clock2 = 0;
+        }
+
+        if (obstacle3.isUsed == false && character.getMoveSpeed() > obstacle3.getSpeedThreshold()) {
+            position     = {curve.getXAppend(), curve.getYAppend()};
+            positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
+            Obstacle obstacles3(obstacleShape3, position, positionNext);
+            obstacle3.isUsed = true;
+        }
+
+        if (obstacle3.isUsed)
+            ++clock3;
+        if (clock3 == 241) {
+                obstacle3.isUsed = false;
+                clock3 = 0;
         }
 
         sf::Event event;
@@ -132,9 +175,9 @@ int main() {
 //                if (event.key.code == sf::Keyboard::Up)
 //                {
 //                    character.addMoveSpeed(10.f);
-//                    moveSpeedText.setString(
-//                        "Move speed: " +
-//                        std::to_string(character.getMoveSpeed()));
+//                   moveSpeedText.setString(
+//                       "Move speed: " +
+//                       std::to_string(character.getMoveSpeed()));
 //                }
 //                else if (event.key.code == sf::Keyboard::Down)
 //                {
@@ -167,7 +210,14 @@ int main() {
         window.draw(curve);
         window.draw(character);
         window.draw(obstacle1);
+        window.draw(obstacle2);
+        window.draw(obstacle3);
+        // window.draw(obstacle4);
+        // window.draw(obstacle5);
+        // window.draw(obstacle6);
+        // window.draw(obstacle7);
         window.setView(window.getDefaultView());
+        //window.draw(moveSpeedText);
         window.display();
     }//end main loop
 }

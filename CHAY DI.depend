@@ -509,13 +509,12 @@
 	<cmath>
 	<numeric>
 
-1554310476 source:d:\c++\chay-di\main.cpp
+1554398641 source:d:\c++\chay-di\main.cpp
 	"Character.h"
 	"Curve.h"
 	"Obstacle.h"
 	"ImprovedPerlinNoise.h"
 	<SFML/Graphics.hpp>
-	<vector>
 	<iostream>
 
 1553928212 source:d:\c++\chay-di\vertexdeque.cpp
@@ -523,12 +522,13 @@
 	<SFML/Graphics/RenderTarget.hpp>
 	<algorithm>
 
-1554310493 d:\c++\chay-di\obstacle.h
+1554396348 d:\c++\chay-di\obstacle.h
 	"Common.h"
 	<SFML/Graphics.hpp>
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Graphics/Shape.hpp>
 	<SFML/Graphics/RenderTarget.hpp>
+	<time.h>
 
 1554221349 source:d:\c++\chay-di\collision.cpp
 	<SFML/Graphics.hpp>
