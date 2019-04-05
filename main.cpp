@@ -43,19 +43,31 @@ int main() {
 
     ////OBSTACLE
     sf::Vector2f position, positionNext;
-    sf::RectangleShape obstacleShape1(sf::Vector2f(50.f, 50.f));
-    obstacleShape1.setFillColor(sf::Color::Red);
-    sf::RectangleShape obstacleShape2(sf::Vector2f(50.f, 50.f));
-    obstacleShape2.setFillColor(sf::Color::Yellow);
-    sf::RectangleShape obstacleShape3(sf::Vector2f(50.f, 50.f));
-    obstacleShape3.setFillColor(sf::Color::Green);
 
-    Obstacle obstacle1(obstacleShape1, position, positionNext),
-             obstacle2(obstacleShape2, position, positionNext),
-             obstacle3(obstacleShape3, position, positionNext);
-    obstacle1.setSpeedThreshold(300.f);
-    obstacle2.setSpeedThreshold(500.f);
-    obstacle3.setSpeedThreshold(600.f);
+    sf::Texture tree;
+    tree.loadFromFile("obstacle1.png");
+    sf::Sprite obs1;
+    obs1.setTexture(tree);
+
+    sf::Texture shit;
+    shit.loadFromFile("obstacle2.png");
+    sf::Sprite obs2;
+    obs2.setTexture(shit);
+
+    sf::Texture rock;
+    rock.loadFromFile("obstacle3.png");
+    sf::Sprite obs3;
+    obs3.setTexture(rock);
+//    sf::RectangleShape obstacleShape1(sf::Vector2f(50.f, 50.f));
+//    obstacleShape1.setFillColor(sf::Color::Red);
+//    sf::RectangleShape obstacleShape2(sf::Vector2f(50.f, 50.f));
+//    obstacleShape2.setFillColor(sf::Color::Yellow);
+//    sf::RectangleShape obstacleShape3(sf::Vector2f(50.f, 50.f));
+//    obstacleShape3.setFillColor(sf::Color::Green);
+
+    Obstacle obstacle1(obs1, position, positionNext),
+             obstacle2(obs2, position, positionNext),
+             obstacle3(obs3, position, positionNext);
 
     ////CLOCK
     sf::Clock clock1, clock2, clock3, clockPlayed;
@@ -121,28 +133,26 @@ int main() {
         ////GENERATE OBSTACLES
         timePlayed = clockPlayed.getElapsedTime();
         time1 = clock1.getElapsedTime();
-        if (time1.asMilliseconds() > rand()%1000+1500 && timePlayed.asSeconds() > 10) {
+        if (time1.asMilliseconds() > rand()%498+2267 && timePlayed.asSeconds() > 10) {
             position     = {curve.getXAppend(), curve.getYAppend()};
             positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
-            Obstacle obstacle1_(obstacleShape1, position, positionNext);
+            Obstacle obstacle1_(obs1, position, positionNext);
             clock1.restart();
-        }
-        timeAfter1 = clock1.getElapsedTime();
+        };
 
         time2 = clock2.getElapsedTime();
-        if (timeAfter1.asMilliseconds() > 1000 && time2.asMilliseconds() > rand()%1000+3000 && timePlayed.asSeconds() > 15) {
+        if (time2.asMilliseconds() > rand()%975+3040 && timePlayed.asSeconds() > 17) {
             position     = {curve.getXAppend(), curve.getYAppend()};
             positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
-            Obstacle obstacle2_(obstacleShape2, position, positionNext);
+            Obstacle obstacle2_(obs2, position, positionNext);
             clock2.restart();
         }
-        timeAfter2 = clock2.getElapsedTime();
 
         time3 = clock3.getElapsedTime();
-        if (timeAfter2.asMilliseconds() > 1000 && time3.asMilliseconds() > rand()%1000+4000 && timePlayed.asSeconds() > 17) {
+        if (time3.asMilliseconds() > rand()%1000+4373 && timePlayed.asSeconds() > 27) {
             position     = {curve.getXAppend(), curve.getYAppend()};
             positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
-            Obstacle obstacle3_(obstacleShape3, position, positionNext);
+            Obstacle obstacle3_(obs3, position, positionNext);
             clock3.restart();
         }
 
