@@ -58,7 +58,8 @@ int main() {
     obstacle3.setSpeedThreshold(600.f);
 
     ////CLOCK
-    long int clock1 = 0, clock2 = 0, clock3 = 0, clock4 = 0, clock5 = 0, clock6 = 0, clock7 = 0;
+    sf::Clock clock1, clock2, clock3, clockPlayed;
+    sf::Time  time1,  time2,  time3,  timePlayed, timeAfter1, timeAfter2, timeAfter3;
 
     sf::View view = window.getView();
     view.setCenter(120, 0);
@@ -98,7 +99,6 @@ int main() {
         shape.setOrigin(15, yOrigin);
 
         ///////MOVE CHARACTER
-        //game's special logic
         if (character.getAngle() > 0) {
             if (characterUp == true)
                 character.addMoveSpeed(1);
@@ -118,46 +118,32 @@ int main() {
         //generate continuous curve as character moves
         curve.syncWithView(view);
 
-        if (obstacle1.isUsed == false && character.getMoveSpeed() > obstacle1.getSpeedThreshold()) {
+        ////GENERATE OBSTACLES
+        timePlayed = clockPlayed.getElapsedTime();
+        time1 = clock1.getElapsedTime();
+        if (time1.asMilliseconds() > rand()%1000+1500 && timePlayed.asSeconds() > 10) {
             position     = {curve.getXAppend(), curve.getYAppend()};
             positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
-            Obstacle obstacles1(obstacleShape1, position, positionNext);
-            obstacle1.isUsed = true;
+            Obstacle obstacle1_(obstacleShape1, position, positionNext);
+            clock1.restart();
         }
+        timeAfter1 = clock1.getElapsedTime();
 
-        if (obstacle1.isUsed)
-            ++clock1;
-        if (clock1 == 189) {
-                obstacle1.isUsed = false;
-                clock1 = 0;
-        }
-
-        if (obstacle2.isUsed == false && character.getMoveSpeed() > obstacle2.getSpeedThreshold()) {
+        time2 = clock2.getElapsedTime();
+        if (timeAfter1.asMilliseconds() > 1000 && time2.asMilliseconds() > rand()%1000+3000 && timePlayed.asSeconds() > 15) {
             position     = {curve.getXAppend(), curve.getYAppend()};
             positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
-            Obstacle obstacles2(obstacleShape2, position, positionNext);
-            obstacle2.isUsed = true;
+            Obstacle obstacle2_(obstacleShape2, position, positionNext);
+            clock2.restart();
         }
+        timeAfter2 = clock2.getElapsedTime();
 
-        if (obstacle2.isUsed)
-            ++clock2;
-        if (clock2 == 289) {
-                obstacle2.isUsed = false;
-                clock2 = 0;
-        }
-
-        if (obstacle3.isUsed == false && character.getMoveSpeed() > obstacle3.getSpeedThreshold()) {
+        time3 = clock3.getElapsedTime();
+        if (timeAfter2.asMilliseconds() > 1000 && time3.asMilliseconds() > rand()%1000+4000 && timePlayed.asSeconds() > 17) {
             position     = {curve.getXAppend(), curve.getYAppend()};
             positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
-            Obstacle obstacles3(obstacleShape3, position, positionNext);
-            obstacle3.isUsed = true;
-        }
-
-        if (obstacle3.isUsed)
-            ++clock3;
-        if (clock3 == 241) {
-                obstacle3.isUsed = false;
-                clock3 = 0;
+            Obstacle obstacle3_(obstacleShape3, position, positionNext);
+            clock3.restart();
         }
 
         sf::Event event;

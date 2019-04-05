@@ -12,12 +12,6 @@ public:
 	bool up;
 	bool isUsed;
 
-	Obstacle(sf::Shape& shape) : shape(shape)
-	{
-        position = sf::Vector2f(0,0);
-        positionNext = sf::Vector2f(0,0);
-	}
-
 	Obstacle(sf::Shape& shape, const sf::Vector2f& position_, const sf::Vector2f& positionNext_)
 	: shape(shape), position(position_), positionNext(positionNext_)
 	{
