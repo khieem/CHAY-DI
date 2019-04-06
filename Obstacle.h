@@ -16,7 +16,7 @@ public:
 	    srand(time(NULL));
 	    up = rand()%2;
 		sprite.setPosition(position);
-        sprite.setOrigin(70, 70);
+        sprite.setOrigin(35, 70);
 		fixRotation();
 	}
 

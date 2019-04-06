@@ -2,21 +2,25 @@
 
 #include "Curve.h"
 #include "Common.h"
-#include <SFML/Graphics/Drawable.hpp>
-#include <SFML/Graphics/Shape.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics.hpp>
+//#include <SFML/Graphics/Drawable.hpp>
+//#include <SFML/Graphics/Shape.hpp>
+//#include <SFML/Graphics/RenderTarget.hpp>
 
 class Character : public sf::Drawable
 {
 public:
-    Character(sf::Shape& shape, const Curve& curve, float moveSpeed = 70.f)
-    : shape(shape),
+    bool up = true;
+
+    Character(sf::Sprite& sprite, const Curve& curve, float moveSpeed = 70.f)
+    : sprite(sprite),
       moveSpeed(moveSpeed),
       curve(curve),
       segmentIndex(0),
       segmentPercentage(0)
     {
-        shape.setPosition(curve[0]);
+        sprite.setPosition(curve[0]);
+        sprite.setOrigin(25, 50);
         fixRotation();
     }
 
@@ -32,8 +36,8 @@ public:
         if (moveAmt < segmentLen) {
             segmentPercentage -= moveAmt / segmentLen;
             auto newPos = lerp(a, b, segmentPercentage);
-            auto moveDist = newPos - shape.getPosition();
-            shape.move(moveDist);
+            auto moveDist = newPos - sprite.getPosition();
+            sprite.move(moveDist);
             fixRotation();
             return moveDist;
         }
@@ -52,8 +56,8 @@ public:
         if (moveAmt < segmentLen) {
             segmentPercentage += moveAmt / segmentLen;
             auto newPos = lerp(a, b, segmentPercentage);
-            auto moveDist = newPos - shape.getPosition();
-            shape.move(moveDist);
+            auto moveDist = newPos - sprite.getPosition();
+            sprite.move(moveDist);
             fixRotation();
             return moveDist;
         }
@@ -69,7 +73,8 @@ public:
         auto const& a = curve[segmentIndex];
         auto const& b = curve[segmentIndex + 1];
         angle = angleSlope(a, b);
-        shape.setRotation(angle);
+        float phi = (up ? 0 : 180);
+        sprite.setRotation(angle + phi);
     }
 
     void addMoveSpeed(const float& amount) {
@@ -82,7 +87,7 @@ public:
     }
 
     sf::Vector2f getPosition() const {
-        return shape.getPosition();
+        return sprite.getPosition();
     }
 
     float getAngle() const {
@@ -90,7 +95,7 @@ public:
     }
 
 private:
-    sf::Shape& shape;
+    sf::Sprite& sprite;
     float moveSpeed;
     const Curve& curve;
     int segmentIndex;
@@ -98,6 +103,6 @@ private:
     float angle;
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
-        target.draw(shape, states);
+        target.draw(sprite, states);
     }
 };

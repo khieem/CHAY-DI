@@ -12,8 +12,6 @@ int main() {
 
     //initialize properties for the curve
     ImprovedPerlinNoise noiseGen;
-//    int seed = 13217;
-//    seed = 472;
     auto yGen = [&](float x) {
         const float xScale = 2e-3f;
         const float yMagnitude1 = 20;
@@ -29,17 +27,14 @@ int main() {
     };
 
     //create the in-sight curve with the properties initialized
-    Curve curve(5.f, window.getSize().x, yGen);
+    Curve curve(2.f, window.getSize().x, yGen);
 
     ////INITIALIZE CHARACTER
-    //determine if our character is upside-down or not
-    bool characterUp = true;
-    int yOrigin = 50;
-    sf::RectangleShape shape(sf::Vector2f(30.f, 50.f));
-    shape.setFillColor(sf::Color(68, 196, 164));
-    //create a bool allows our character to flip by toggling
-    //between 50 and 0 in main loop
-    Character character(shape, curve);
+    sf::Texture manTexture;
+    manTexture.loadFromFile("character.png");
+    sf::Sprite man;
+    man.setTexture(manTexture);
+    Character character(man, curve);
 
     ////OBSTACLE
     sf::Vector2f position, positionNext;
@@ -71,7 +66,7 @@ int main() {
 
     ////CLOCK
     sf::Clock clock1, clock2, clock3, clockPlayed;
-    sf::Time  time1,  time2,  time3,  timePlayed, timeAfter1, timeAfter2, timeAfter3;
+    sf::Time  time1,  time2,  time3,  timePlayed;
 
     sf::View view = window.getView();
     view.setCenter(120, 0);
@@ -106,18 +101,15 @@ int main() {
     //main loop
     while (window.isOpen()) {
         window.clear(sf::Color(53, 49, 74));
-        ///////FLIP CHARACTER
-        yOrigin = (characterUp ? 50 : 0);
-        shape.setOrigin(15, yOrigin);
 
         ///////MOVE CHARACTER
         if (character.getAngle() > 0) {
-            if (characterUp == true)
+            if (character.up == true)
                 character.addMoveSpeed(1);
             else character.addMoveSpeed(1);
         }
         else {
-            if (characterUp == true)
+            if (character.up == true)
                 character.addMoveSpeed(-1.f);
             else character.addMoveSpeed(1.f);
         } //end if
@@ -164,7 +156,7 @@ int main() {
             //if player presses any button
             else if (event.type == sf::Event::KeyPressed) {
                 //flip character
-                characterUp = !characterUp;
+                character.up = !character.up;
             } // end if
 //            else if (event.type == sf::Event::KeyPressed)
 //            {
@@ -208,10 +200,6 @@ int main() {
         window.draw(obstacle1);
         window.draw(obstacle2);
         window.draw(obstacle3);
-        // window.draw(obstacle4);
-        // window.draw(obstacle5);
-        // window.draw(obstacle6);
-        // window.draw(obstacle7);
         window.setView(window.getDefaultView());
         //window.draw(moveSpeedText);
         window.display();
