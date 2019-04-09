@@ -467,7 +467,7 @@
 	"Common.h"
 	<SFML/Graphics/RenderTarget.hpp>
 
-1554522201 d:\c++\chay-di\character.h
+1554822582 d:\c++\chay-di\character.h
 	"Curve.h"
 	"Common.h"
 	<SFML/Graphics.hpp>
@@ -507,11 +507,12 @@
 	<cmath>
 	<numeric>
 
-1554521941 source:d:\c++\chay-di\main.cpp
+1554821569 source:d:\c++\chay-di\main.cpp
 	"Character.h"
 	"Curve.h"
 	"Obstacle.h"
 	"ImprovedPerlinNoise.h"
+	"Collision.h"
 	<SFML/Graphics.hpp>
 	<iostream>
 
@@ -528,11 +529,12 @@
 	<SFML/Graphics/RenderTarget.hpp>
 	<time.h>
 
-1554221349 source:d:\c++\chay-di\collision.cpp
+1554820877 source:d:\c++\chay-di\collision.cpp
 	<SFML/Graphics.hpp>
 	<map>
 	"Collision.h"
 
-1554221239 d:\c++\chay-di\collision.h
+1554822287 d:\c++\chay-di\collision.h
 	<SFML/Graphics.hpp>
+	<map>
 

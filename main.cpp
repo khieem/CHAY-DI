@@ -2,6 +2,7 @@
 #include "Curve.h"
 #include "Obstacle.h"
 #include "ImprovedPerlinNoise.h"
+#include "Collision.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -29,12 +30,15 @@ int main() {
     //create the in-sight curve with the properties initialized
     Curve curve(2.f, window.getSize().x, yGen);
 
+
     ////INITIALIZE CHARACTER
     sf::Texture manTexture;
     manTexture.loadFromFile("character.png");
+    manTexture.setSmooth(true);
     sf::Sprite man;
     man.setTexture(manTexture);
     Character character(man, curve);
+
 
     ////OBSTACLE
     sf::Vector2f position, positionNext;
@@ -53,16 +57,11 @@ int main() {
     rock.loadFromFile("obstacle3.png");
     sf::Sprite obs3;
     obs3.setTexture(rock);
-//    sf::RectangleShape obstacleShape1(sf::Vector2f(50.f, 50.f));
-//    obstacleShape1.setFillColor(sf::Color::Red);
-//    sf::RectangleShape obstacleShape2(sf::Vector2f(50.f, 50.f));
-//    obstacleShape2.setFillColor(sf::Color::Yellow);
-//    sf::RectangleShape obstacleShape3(sf::Vector2f(50.f, 50.f));
-//    obstacleShape3.setFillColor(sf::Color::Green);
 
     Obstacle obstacle1(obs1, position, positionNext),
              obstacle2(obs2, position, positionNext),
              obstacle3(obs3, position, positionNext);
+
 
     ////CLOCK
     sf::Clock clock1, clock2, clock3, clockPlayed;
@@ -71,6 +70,7 @@ int main() {
     sf::View view = window.getView();
     view.setCenter(120, 0);
     curve.syncWithView(view);
+
 
     //load font
     sf::Font font;
@@ -175,6 +175,11 @@ int main() {
 //                        std::to_string(character.getMoveSpeed()));
 //                }
 //            }
+        }
+        if (Collision::PixelPerfectTest(man, obs1) || 
+          Collision::PixelPerfectTest(man, obs2) ||
+          Collision::PixelPerfectTest(man, obs3)) {
+            std::cout << "GAME OVER!!!\n";
         }
 
 
