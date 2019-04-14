@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Curve.h"
-#include "Common.h"
+#include "Physics.h"
 #include <SFML/Graphics.hpp>
 //#include <SFML/Graphics/Drawable.hpp>
 //#include <SFML/Graphics/Shape.hpp>
@@ -12,7 +12,7 @@ class Character : public sf::Drawable
 public:
     bool up = true;
 
-    Character(sf::Sprite& sprite, const Curve& curve, float moveSpeed = 70.f)
+    Character(sf::Sprite& sprite, const Curve& curve, float moveSpeed = 100.f)
     : sprite(sprite),
       moveSpeed(moveSpeed),
       curve(curve),
@@ -79,7 +79,7 @@ public:
 
     void addMoveSpeed(const float& amount) {
         moveSpeed += amount;
-        if (moveSpeed < 0) moveSpeed = 0;
+        if (moveSpeed > 1000.f) moveSpeed = 1000.f;
     }
 
     float getMoveSpeed() const {
@@ -91,7 +91,7 @@ public:
     }
 
     float getAngle() const {
-        return angle;
+        return angle * math::RAD_PER_DEG;
     }
 
 private:

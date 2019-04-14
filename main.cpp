@@ -4,7 +4,10 @@
 #include "ImprovedPerlinNoise.h"
 #include "Collision.h"
 #include <SFML/Graphics.hpp>
+#include <stdlib.h>
 #include <iostream>
+
+float deltaTime = 0.01;
 
 int main() {
     //render window
@@ -14,13 +17,13 @@ int main() {
     //initialize properties for the curve
     ImprovedPerlinNoise noiseGen;
     auto yGen = [&](float x) {
-        const float xScale = 2e-3f;
+        const float xScale      = 2e-3f;
         const float yMagnitude1 = 20;
         const float yMagnitude2 = 130;
         const float yMagnitude3 = 60;
         const float yMagnitude4 = 50;
 
-        const float xScaled = x * xScale;
+        const float xScaled =  x * xScale;
         return float(yMagnitude1 * noiseGen.noise(xScaled * 0) +
                      yMagnitude2 * noiseGen.noise(xScaled * 1) +
                      yMagnitude3 * noiseGen.noise(xScaled * 0.8) +
@@ -62,6 +65,8 @@ int main() {
              obstacle2(obs2, position, positionNext),
              obstacle3(obs3, position, positionNext);
 
+    ////PHYSICS
+    Physics physics;
 
     ////CLOCK
     sf::Clock clock1, clock2, clock3, clockPlayed;
@@ -103,18 +108,38 @@ int main() {
         window.clear(sf::Color(53, 49, 74));
 
         ///////MOVE CHARACTER
-        if (character.getAngle() > 0) {
-            if (character.up == true)
-                character.addMoveSpeed(1);
-            else character.addMoveSpeed(1);
+        sf::Time elapsed = clock.restart();
+        physics.a = physics.G * sin(character.getAngle());
+
+        if (character.getAngle() >= 0) {
+
+            if (character.up == true) {
+                //physics.v += physics.a * elapsed.asSeconds();
+                character.addMoveSpeed(physics.a * elapsed.asSeconds());
+            }
+            else {
+                //physics.v -= physics.a * elapsed.asSeconds();
+                character.addMoveSpeed(-physics.a * elapsed.asSeconds());
+            }
+            //std::cout << elapsed.asSeconds() << std::endl;
         }
         else {
-            if (character.up == true)
-                character.addMoveSpeed(-1.f);
-            else character.addMoveSpeed(1.f);
+            //physics.a = physics.G * sin(character.getAngle());
+
+            if (character.up == true) {
+                //physics.v += physics.a * elapsed.asSeconds();
+                character.addMoveSpeed(physics.a * elapsed.asSeconds());
+            }
+            else {
+                //physics.v -= physics.a * elapsed.asSeconds();
+                character.addMoveSpeed(-physics.a * elapsed.asSeconds());
+            }
+            //std::cout << elapsed.asSeconds() << std::endl;
         } //end if
 
-        sf::Time elapsed = clock.restart();
+        //std::cout << "t : " << elapsed.asSeconds() << "   alpha = " << character.getAngle() << "    a = " << physics.a << "    v = " << character.getMoveSpeed() << std::endl;
+
+//        sf::Time elapsed = clock.restart();
         float moveAmount = 0;
         moveAmount += character.getMoveSpeed() * elapsed.asSeconds();
         //most important statement! makes player feel like character is moving
@@ -130,7 +155,7 @@ int main() {
             positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
             Obstacle obstacle1_(obs1, position, positionNext);
             clock1.restart();
-        };
+        }
 
         time2 = clock2.getElapsedTime();
         if (time2.asMilliseconds() > rand()%975+3040 && timePlayed.asSeconds() > 17) {
@@ -176,7 +201,7 @@ int main() {
 //                }
 //            }
         }
-        if (Collision::PixelPerfectTest(man, obs1) || 
+        if (Collision::PixelPerfectTest(man, obs1) ||
           Collision::PixelPerfectTest(man, obs2) ||
           Collision::PixelPerfectTest(man, obs3)) {
             std::cout << "GAME OVER!!!\n";

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common.h"
+#include "Physics.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Shape.hpp>
@@ -37,4 +37,3 @@ private:
         target.draw(sprite, states);
     }
 };
-
