@@ -3,9 +3,9 @@
 #include "Curve.h"
 #include "Physics.h"
 #include <SFML/Graphics.hpp>
-//#include <SFML/Graphics/Drawable.hpp>
-//#include <SFML/Graphics/Shape.hpp>
-//#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/Shape.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 
 class Character : public sf::Drawable
 {
@@ -32,10 +32,10 @@ public:
     sf::Vector2f moveLeft(float moveAmt) {
         auto const& a = curve[segmentIndex];
         auto const& b = curve[segmentIndex + 1];
-        float segmentLen = distance(a, b) * segmentPercentage;
+        float segmentLen = Physics::distance(a, b) * segmentPercentage;
         if (moveAmt < segmentLen) {
             segmentPercentage -= moveAmt / segmentLen;
-            auto newPos = lerp(a, b, segmentPercentage);
+            auto newPos = Physics::lerp(a, b, segmentPercentage);
             auto moveDist = newPos - sprite.getPosition();
             sprite.move(moveDist);
             fixRotation();
@@ -52,10 +52,10 @@ public:
     sf::Vector2f moveRight(float moveAmt) {
         auto const& a = curve[segmentIndex];
         auto const& b = curve[segmentIndex + 1];
-        float segmentLen = distance(a, b) * (1 - segmentPercentage);
+        float segmentLen = Physics::distance(a, b) * (1 - segmentPercentage);
         if (moveAmt < segmentLen) {
             segmentPercentage += moveAmt / segmentLen;
-            auto newPos = lerp(a, b, segmentPercentage);
+            auto newPos = Physics::lerp(a, b, segmentPercentage);
             auto moveDist = newPos - sprite.getPosition();
             sprite.move(moveDist);
             fixRotation();
@@ -72,14 +72,14 @@ public:
     void fixRotation() {
         auto const& a = curve[segmentIndex];
         auto const& b = curve[segmentIndex + 1];
-        angle = angleSlope(a, b);
+        angle = Physics::angleSlope(a, b);
         float phi = (up ? 0 : 180);
         sprite.setRotation(angle + phi);
     }
 
     void addMoveSpeed(const float& amount) {
         moveSpeed += amount;
-        if (moveSpeed > 1000.f) moveSpeed = 1000.f;
+        if (moveSpeed > 900.f) moveSpeed = 900.f;
     }
 
     float getMoveSpeed() const {
@@ -91,7 +91,15 @@ public:
     }
 
     float getAngle() const {
-        return angle * math::RAD_PER_DEG;
+        return angle * Physics::RAD_PER_DEG;
+    }
+
+    void stop() {
+        setMoveSpeed(0.f);
+    }
+
+    void setMoveSpeed(float v) {
+        moveSpeed = v;
     }
 
 private:

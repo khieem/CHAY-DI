@@ -4,17 +4,17 @@
 	<ActiveTarget name="Debug" />
 	<File name="Character.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2527" topLine="1" />
+			<Cursor1 position="2867" topLine="83" />
 		</Cursor>
 	</File>
 	<File name="Collision.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3154" topLine="0" />
+			<Cursor1 position="3154" topLine="14" />
 		</Cursor>
 	</File>
 	<File name="Curve.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="180" topLine="1" />
+			<Cursor1 position="1923" topLine="38" />
 		</Cursor>
 	</File>
 	<File name="ImprovedPerlinNoise.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -22,24 +22,24 @@
 			<Cursor1 position="303" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="Physics.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="750" topLine="10" />
-		</Cursor>
-	</File>
 	<File name="Obstacle.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="36" topLine="0" />
+			<Cursor1 position="723" topLine="8" />
+		</Cursor>
+	</File>
+	<File name="Physics.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="579" topLine="8" />
 		</Cursor>
 	</File>
 	<File name="VertexDeque.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="264" topLine="0" />
+			<Cursor1 position="266" topLine="14" />
 		</Cursor>
 	</File>
 	<File name="main.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="224" topLine="0" />
+			<Cursor1 position="4475" topLine="126" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

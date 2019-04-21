@@ -467,12 +467,15 @@
 	"Common.h"
 	<SFML/Graphics/RenderTarget.hpp>
 
-1555255549 d:\c++\chay-di\character.h
+1555863144 d:\c++\chay-di\character.h
 	"Curve.h"
 	"Physics.h"
 	<SFML/Graphics.hpp>
+	<SFML/Graphics/Drawable.hpp>
+	<SFML/Graphics/Shape.hpp>
+	<SFML/Graphics/RenderTarget.hpp>
 
-1554956512 d:\c++\chay-di\curve.h
+1555826969 d:\c++\chay-di\curve.h
 	"VertexDeque.h"
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Graphics/View.hpp>
@@ -507,7 +510,7 @@
 	<cmath>
 	<numeric>
 
-1555255524 source:d:\c++\chay-di\main.cpp
+1555864080 source:d:\c++\chay-di\main.cpp
 	"Character.h"
 	"Curve.h"
 	"Obstacle.h"
@@ -522,7 +525,7 @@
 	<SFML/Graphics/RenderTarget.hpp>
 	<algorithm>
 
-1555250080 d:\c++\chay-di\obstacle.h
+1555854377 d:\c++\chay-di\obstacle.h
 	"Physics.h"
 	<SFML/Graphics.hpp>
 	<SFML/Graphics/Drawable.hpp>
@@ -539,7 +542,7 @@
 	<SFML/Graphics.hpp>
 	<map>
 
-1555254604 d:\c++\chay-di\physics.h
+1555826244 d:\c++\chay-di\physics.h
 	<SFML/System/Vector2.hpp>
 
 1555236557 d:\c++\chay-di\math.h

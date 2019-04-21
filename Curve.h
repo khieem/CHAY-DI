@@ -46,11 +46,11 @@ public:
             indexOffset--;
         }
         // Trim right points
-        while (lines[lines.getVertexCount() - 1].position.x - xStep > right) {
-            lines.removeLast();
-            // doesn't affect indexOffset
-        }
-        // Trim left points
+//        while (lines[lines.getVertexCount() - 1].position.x - xStep > right) {
+//            lines.removeLast();
+//            // doesn't affect indexOffset
+//        }
+         //Trim left points
         while (lines[0].position.x + xStep < left) {
             lines.removeFirst();
             indexOffset++;

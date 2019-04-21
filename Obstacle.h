@@ -21,9 +21,9 @@ public:
 	}
 
 	void fixRotation() {
-		angle = angleSlope(position, positionNext);
+		angle = Physics::angleSlope(position, positionNext);
 		float phi = (up ? 0 : 180);
-		sprite.setRotation(angle - phi);
+		sprite.setRotation(angle + phi);
 	}
 
 	float getAngle() const {return angle;}
