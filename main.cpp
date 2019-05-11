@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <iostream>
 
-float viewX = 120, viewY = 0;
+//float viewX = 120, viewY = 0;
 
 int main() {
     //render window
@@ -18,6 +18,38 @@ int main() {
     gmovrM_t.loadFromFile("gmovr_menu.png");
     sf::Sprite gmovrM_s;
     gmovrM_s.setTexture(gmovrM_t);
+
+    sf::Texture mainM_t;
+    mainM_t.loadFromFile("main_menu.png");
+    sf::Sprite mainM_s;
+    mainM_s.setTexture(mainM_t);
+
+    sf::Font font;
+    if (!font.loadFromFile("MAIAN.ttf")) {
+        std::cout << "Cannot open MAIAN.ttf\n";
+        return 1;
+    }
+
+//    sf::Text mainM_text;
+//    mainM_text.setFont(font);
+//    mainM_text.setString(L"Bam phim bat ki...");
+//    mainM_text.setCharacterSize(20);
+//    mainM_text.setFillColor(sf::Color::Red);
+//    mainM_text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+
+    sf::Texture instruction_t;
+    instruction_t.loadFromFile("instruction.png");
+    sf::Sprite instruction_s;
+    instruction_s.setTexture(instruction_t);
+    int alpha = 0, i = 0;
+
+    sf::Texture grad_t;
+    grad_t.loadFromFile("gradient.png");
+    sf::Sprite grad_s;
+    grad_s.setTexture(grad_t);
+
+    //instruction_s.setPosition(200.f, 500.f);
+
 
     //initialize properties for the curve
     ImprovedPerlinNoise noiseGen;
@@ -36,7 +68,7 @@ int main() {
     };
 
     //create the in-sight curve with the properties initialized
-    Curve curve(5.f, window.getSize().x, yGen);
+    Curve curve(1.f, window.getSize().x, yGen);
 
 
     ////INITIALIZE CHARACTER
@@ -66,6 +98,11 @@ int main() {
     sf::Sprite obs3;
     obs3.setTexture(rock);
 
+    sf::Texture darkness_t;
+    darkness_t.loadFromFile("darkness.png");
+    sf::Sprite darkness_s;
+    darkness_s.setTexture(darkness_t);
+
     Obstacle obstacle1(obs1, position, positionNext),
              obstacle2(obs2, position, positionNext),
              obstacle3(obs3, position, positionNext);
@@ -80,20 +117,16 @@ int main() {
     curve.syncWithView(view);
 
 
-    //load font
-    sf::Font font;
-    if (!font.loadFromFile("MAIAN.ttf")) {
-        std::cout << "Cannot open MAIAN.ttf\n";
-        return 1;
-    }//end loading font
+
 
 //    sf::Text seedText("Seed: " + std::to_string(seed), font, 1);
 //    seedText.setPosition(0, 0);
 //    seedText.setFillColor(sf::Color::Black);
-   // sf::Text moveSpeedText(
-   //     "Move speed: " + std::to_string(character.getMoveSpeed()), font, 16);
-   // moveSpeedText.setPosition(0, 16);
-   // moveSpeedText.setFillColor(sf::Color::Black);
+//    sf::Text distanceText;
+//    //distanceText.setPosition (0.f, 0.f);
+//    distanceText.setStyle    (sf::Text::Bold);
+//    distanceText.setFillColor(sf::Color::White);
+
    // sf::Text curvePointsText{
    //     "Curve points: " + std::to_string(curve.getPointsCount()), font, 16};
    // curvePointsText.setPosition(0, 32);
@@ -109,8 +142,11 @@ int main() {
     sf::Clock clock1, clock2, clock3, clockPlayed;
     sf::Time  time1,  time2,  time3,  timePlayed;
 
-    //main loop
-    bool gameOver = false, collided = false, gameStart = false, startRequest = false;
+    /*----------------------------------------------------------------------------------
+                                      MAIN LOOP
+    ----------------------------------------------------------------------------------*/
+    bool gameOver = false, collided = false, gameStart = false, startRequest = false, gameReady = false;
+    int distanceRan = 0;
     while (window.isOpen()) {
         while (!gameOver) {
             sf::Event event;
@@ -123,16 +159,18 @@ int main() {
                     if (gameStart)
                         //flip character
                         character.up = !character.up;
-                    else {
-                        startRequest = true;
-                        //gameStart = true;
-
+                    else if (!gameReady) {
+                        gameReady = true;
+                        //startRequest = true;
                     }
+                    else if (gameReady)
+                        startRequest = true;
                 } // end if
             }
 
             if (startRequest && character.getMoveSpeed() > 0.f && character.getMoveSpeed() < 6.f && character.getAngle() > 0 ) {
                     gameStart = true;
+                    distanceRan = 0;
                     clock1.     restart();
                     clock2.     restart();
                     clock3.     restart();
@@ -146,6 +184,7 @@ int main() {
             //if (physics.a < -210) physics.a = -210;
             //std::cout << physics.a << std::endl;
             float instantVeclocity = physics.a * elapsed.asSeconds();
+            std::cout << instantVeclocity << std::endl;
 //            if (!gameStart) {
 //                view.setCenter(120,0);
 //                //instantVeclocity = 0;
@@ -196,6 +235,9 @@ int main() {
             //std::cout << "t : " << elapsed.asSeconds() << "   alpha = " << character.getAngle() << "    a = " << physics.a << "    v = " << character.getMoveSpeed() << std::endl;
             if (!gameStart) {
                 view.setCenter(120,0);
+                instruction_s.setColor(sf::Color(255, 255, 255, alpha += i));
+                if (alpha >= 252) i = -3;
+                if (alpha <= 90)  i =  3;
                 //if (character.getMoveSpeed() > 200.f) character.setMoveSpeed(200.f);
                 //if (character.getMoveSpeed() < -200.f) character.setMoveSpeed(-200.f);
                 //curve.syncWithView(view);
@@ -223,8 +265,15 @@ int main() {
             // }
 
             moveAmount += character.getMoveSpeed() * elapsed.asSeconds();
+            distanceRan += abs(moveAmount);
+            //distanceText.setString("m: ");
+            std::string unit = "m: ";
+            if (distanceRan > 20000) unit = "km: ";
+            sf::Text distanceText{unit + std::to_string(distanceRan/20), font, 16};
+    //distanceText.setPosition (0.f, 0.f);
+            distanceText.setStyle    (sf::Text::Bold);
+            distanceText.setFillColor(sf::Color::White);
 
-            //most important statement! makes player feel like character is moving
             view.move(character.move(moveAmount));
             //generate continuous curve as character moves
 //            viewX += moveAmount * cos(character.getAngle());
@@ -321,18 +370,34 @@ int main() {
             //if (gmovrTime.asSeconds() == 1.5) gameOver = true;
 
 
-
+            //window.setView(view);
             window.clear(sf::Color::Black);
+            if (!gameReady) {
+                window.draw(mainM_s);
+                window.draw(instruction_s);
+            }
+
+            //if (startRequest && character.getMoveSpeed() > 0.f && character.getMoveSpeed() < 6.f && character.getAngle() > 0 )
+            //{
+             //   character.stop();
+               // window.draw(grad_s);
+            //}
+
             window.setView(view);
             window.draw   (curve);
             window.draw   (character);
+
             if (gameStart) {
+                //window.setView(view);
                 window.draw   (obstacle1);
                 window.draw   (obstacle2);
                 window.draw   (obstacle3);
+
             }
             window.setView(window.getDefaultView());
-            //window.draw(moveSpeedText);
+
+            if (gameStart)
+                window.draw   (distanceText);
             window.display();
         }//while game is not over
 
