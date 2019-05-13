@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <iostream>
 
-//float viewX = 120, viewY = 0;
+//float viewX = 120, viewY = 0;o
 
 int main() {
     //render window
@@ -43,10 +43,18 @@ int main() {
     instruction_s.setTexture(instruction_t);
     int alpha = 0, i = 0;
 
-    sf::Texture grad_t;
-    grad_t.loadFromFile("gradient.png");
-    sf::Sprite grad_s;
-    grad_s.setTexture(grad_t);
+    sf::Texture instruction1_t;
+    instruction1_t.loadFromFile("instruction1.png");
+    sf::Sprite instruction1_s;
+    instruction1_s.setTexture(instruction1_t);
+    int insAlpha = 0;
+    //instruction1_s.setColor(sf::Color(255,255,255,insAlpha));
+
+    sf::Texture youReady_t;
+    youReady_t.loadFromFile("youReady.png");
+    sf::Sprite youReady_s;
+    youReady_s.setTexture(youReady_t);
+    int readyAlpha = 0;
 
     //instruction_s.setPosition(200.f, 500.f);
 
@@ -145,8 +153,10 @@ int main() {
     /*----------------------------------------------------------------------------------
                                       MAIN LOOP
     ----------------------------------------------------------------------------------*/
-    bool gameOver = false, collided = false, gameStart = false, startRequest = false, gameReady = false;
+    bool gameOver = false, collided = false, gameStart = false,
+         startRequest = false, gameInstructing = false, gameReady = false;
     int distanceRan = 0;
+
     while (window.isOpen()) {
         while (!gameOver) {
             sf::Event event;
@@ -156,25 +166,55 @@ int main() {
                     window.close();
                 //if player presses any button
                 else if (event.type == sf::Event::KeyPressed) {
-                    if (gameStart)
-                        //flip character
-                        character.up = !character.up;
-                    else if (!gameReady) {
-                        gameReady = true;
+                    if (!gameInstructing) {
+                        gameInstructing = true;
+                        std::cout << "INSTR\n";
                         //startRequest = true;
                     }
-                    else if (gameReady)
-                        startRequest = true;
+                    else if (!gameReady) {
+//                        gameStart = true;
+//                    distanceRan = 0;
+//                    clock1.     restart();
+//                    clock2.     restart();
+//                    clock3.     restart();
+//                    clockPlayed.restart();
+                    // startRequest = true;
+                        gameReady = true;
+                        //gameInstructing = false;
+                        std::cout << "READY\n";
+                    }
+
+                    else if (!gameStart) {
+//                        gameStart = true;
+//                        //gameReady = false;
+//                        std::cout << "START\n";
+//                        view.setCenter(character.getPosition());
+//                        distanceRan = 0;
+//                        clock1.     restart();
+//                        clock2.     restart();
+//                        clock3.     restart();
+//                        clockPlayed.restart();
+                            startRequest = true;
+
+                    }
+                    else if (gameStart) {
+                        //flip character
+                        character.up = !character.up;
+                        std::cout << "FLIP\n";
+                    }
+
                 } // end if
+
+
             }
 
+
             if (startRequest && character.getMoveSpeed() > 0.f && character.getMoveSpeed() < 6.f && character.getAngle() > 0 ) {
-                    gameStart = true;
-                    distanceRan = 0;
-                    clock1.     restart();
-                    clock2.     restart();
-                    clock3.     restart();
-                    clockPlayed.restart();
+                     gameStart = true;
+                     clock1.     restart();
+                     clock2.     restart();
+                     clock3.     restart();
+                     clockPlayed.restart();
             }
             //std::cout << character.getMoveSpeed() << std::endl;
             ///////MOVE CHARACTER
@@ -184,7 +224,7 @@ int main() {
             //if (physics.a < -210) physics.a = -210;
             //std::cout << physics.a << std::endl;
             float instantVeclocity = physics.a * elapsed.asSeconds();
-            std::cout << instantVeclocity << std::endl;
+            //std::cout << instantVeclocity << std::endl;
 //            if (!gameStart) {
 //                view.setCenter(120,0);
 //                //instantVeclocity = 0;
@@ -265,10 +305,11 @@ int main() {
             // }
 
             moveAmount += character.getMoveSpeed() * elapsed.asSeconds();
+            if (!gameStart) distanceRan = 0;
             distanceRan += abs(moveAmount);
             //distanceText.setString("m: ");
             std::string unit = "m: ";
-            if (distanceRan > 20000) unit = "km: ";
+//            if (distanceRan > 20000) unit = "km: ";
             sf::Text distanceText{unit + std::to_string(distanceRan/20), font, 16};
     //distanceText.setPosition (0.f, 0.f);
             distanceText.setStyle    (sf::Text::Bold);
@@ -371,21 +412,36 @@ int main() {
 
 
             //window.setView(view);
-            window.clear(sf::Color::Black);
+            window.clear(sf::Color(40, 40, 40));
+
+
             if (!gameReady) {
-                window.draw(mainM_s);
+                if (!gameInstructing)
+                    window.draw(mainM_s);
+                else {
+                    //window.draw(gravityGradient_s);
+                    if (insAlpha < 250)
+                        insAlpha += 5;
+                    instruction1_s.setColor(sf::Color(255, 255, 255, insAlpha));
+                    window.draw(instruction1_s);
+                }
                 window.draw(instruction_s);
             }
-
+            else if (!startRequest){
+                if (readyAlpha < 250)
+                    readyAlpha += 5;
+                youReady_s.setColor(sf::Color(255, 255, 255, readyAlpha));
+                window.draw(youReady_s);
+            }
             //if (startRequest && character.getMoveSpeed() > 0.f && character.getMoveSpeed() < 6.f && character.getAngle() > 0 )
             //{
              //   character.stop();
                // window.draw(grad_s);
             //}
 
-            window.setView(view);
-            window.draw   (curve);
-            window.draw   (character);
+            window.setView    (view);
+            window.draw       (curve);
+            window.draw       (character);
 
             if (gameStart) {
                 //window.setView(view);
@@ -396,7 +452,7 @@ int main() {
             }
             window.setView(window.getDefaultView());
 
-            if (gameStart)
+            if (startRequest)
                 window.draw   (distanceText);
             window.display();
         }//while game is not over
