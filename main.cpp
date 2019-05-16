@@ -7,17 +7,23 @@
 #include <stdlib.h>
 #include <iostream>
 
-//float viewX = 120, viewY = 0;o
+float maxSpeed = 0.f, speedLimit = 200.f;
 
 int main() {
     //render window
     sf::RenderWindow window(sf::VideoMode(800, 500), "CHAY DI!!!");
     window.setFramerateLimit(60);
 
+    sf::Texture background_t;
+    background_t.loadFromFile("background.png");
+    sf::Sprite background_s;
+    background_s.setTexture(background_t);
+
     sf::Texture gmovrM_t;
     gmovrM_t.loadFromFile("gmovr_menu.png");
     sf::Sprite gmovrM_s;
     gmovrM_s.setTexture(gmovrM_t);
+    int gmovrMAlpha = 0;
 
     sf::Texture mainM_t;
     mainM_t.loadFromFile("main_menu.png");
@@ -110,6 +116,13 @@ int main() {
     darkness_t.loadFromFile("darkness.png");
     sf::Sprite darkness_s;
     darkness_s.setTexture(darkness_t);
+    darkness_s.setPosition(-1800.f, -500.f);
+
+//    sf::Texture flag_t;
+//    flag_t.loadFromFile("flag.png");
+//    sf::Sprite flag_s;
+//    flag_s.setTexture(flag_t);
+//    flag_s.setPosition(-60.f, -75.f);
 
     Obstacle obstacle1(obs1, position, positionNext),
              obstacle2(obs2, position, positionNext),
@@ -147,8 +160,8 @@ int main() {
    // positionText.setFillColor(sf::Color::Black);
 
     sf::Clock clock;
-    sf::Clock clock1, clock2, clock3, clockPlayed;
-    sf::Time  time1,  time2,  time3,  timePlayed;
+    sf::Clock clock1, clock2, clock3, clockPlayed, clockBefore1, clockBefore2, clockBefore3;
+    sf::Time  time1,  time2,  time3,  timePlayed, timeBefore1, timeBefore2, timeBefore3;
 
     /*----------------------------------------------------------------------------------
                                       MAIN LOOP
@@ -164,49 +177,30 @@ int main() {
                 //close the window
                 if (event.type == sf::Event::Closed)
                     window.close();
-                //if player presses any button
-                else if (event.type == sf::Event::KeyPressed) {
-                    if (!gameInstructing) {
-                        gameInstructing = true;
-                        std::cout << "INSTR\n";
-                        //startRequest = true;
+                else if (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::KeyPressed) {
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                        if (gameStart) {
+                            character.up = !character.up;
+                        }
+                        sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+                        if (localPosition.x >= 359 && localPosition.x <= 440 && localPosition.y >= 431 && localPosition.y <= 470 || sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+                            if (!gameInstructing) {
+                                gameInstructing = true;
+                            }
+                            else if (!gameReady) {
+                                gameReady = true;
+                            }
+                            else if (!gameStart) {
+                                startRequest = true;
+                            }
+                        }
                     }
-                    else if (!gameReady) {
-//                        gameStart = true;
-//                    distanceRan = 0;
-//                    clock1.     restart();
-//                    clock2.     restart();
-//                    clock3.     restart();
-//                    clockPlayed.restart();
-                    // startRequest = true;
-                        gameReady = true;
-                        //gameInstructing = false;
-                        std::cout << "READY\n";
-                    }
-
-                    else if (!gameStart) {
-//                        gameStart = true;
-//                        //gameReady = false;
-//                        std::cout << "START\n";
-//                        view.setCenter(character.getPosition());
-//                        distanceRan = 0;
-//                        clock1.     restart();
-//                        clock2.     restart();
-//                        clock3.     restart();
-//                        clockPlayed.restart();
-                            startRequest = true;
-
-                    }
-                    else if (gameStart) {
-                        //flip character
-                        character.up = !character.up;
-                        std::cout << "FLIP\n";
-                    }
-
-                } // end if
-
-
+                }
             }
+
+
+
+
 
 
             if (startRequest && character.getMoveSpeed() > 0.f && character.getMoveSpeed() < 6.f && character.getAngle() > 0 ) {
@@ -216,6 +210,8 @@ int main() {
                      clock3.     restart();
                      clockPlayed.restart();
             }
+
+
             //std::cout << character.getMoveSpeed() << std::endl;
             ///////MOVE CHARACTER
             sf::Time elapsed = clock.restart();
@@ -224,47 +220,33 @@ int main() {
             //if (physics.a < -210) physics.a = -210;
             //std::cout << physics.a << std::endl;
             float instantVeclocity = physics.a * elapsed.asSeconds();
-            //std::cout << instantVeclocity << std::endl;
-//            if (!gameStart) {
-//                view.setCenter(120,0);
-//                //instantVeclocity = 0;
-//            }
-            //physics.a_ms = math::G * cos(character.getAngle()) * math::MUY;
-            //physics.a    = physics.a_qt - physics.a_ms;
-            //std::cout << physics.a_qt << "    " << physics.a_ms << std::endl;
+            if (speedLimit < 800.f)
+                speedLimit += timePlayed.asSeconds() * 2;
+            if (abs(character.getMoveSpeed()) > speedLimit) {
+                instantVeclocity = 0;
+            }
 
-//            if (character.getAngle() >= 0) {
-//
-//                if (character.up == true) {
-//                    //physics.v += physics.a * elapsed.asSeconds();
-//                    character.addMoveSpeed(instantVeclocity);
-//                }
-//                else {
-//                    //physics.v -= physics.a * elapsed.asSeconds();
-//                    character.addMoveSpeed(-instantVeclocity);
-//                }
-//                //std::cout << elapsed.asSeconds() << std::endl;
-//            }
-//            else {
-//                //physics.a = physics.G * sin(character.getAngle());
-//
-//                if (character.up == true) {
-//                    //physics.v += physics.a * elapsed.asSeconds();
-//                    character.addMoveSpeed(instantVeclocity);
-//                }
-//                else {
-//                    //physics.v -= physics.a * elapsed.asSeconds();
-//                    character.addMoveSpeed(-instantVeclocity);
-//                }
-//                //std::cout << elapsed.asSeconds() << std::endl;
-//            } //end if
-
-            if (!collided)
+            collided = Collision::PixelPerfectTest(man, obs1) || Collision::PixelPerfectTest(man, obs2) || Collision::PixelPerfectTest(man, obs3);
+            if (collided)   character.stop();
+            else {
                 if (character.up == true)
                     character.addMoveSpeed(instantVeclocity);
                 else
                     character.addMoveSpeed(-instantVeclocity);
-            else character.stop();
+            }
+
+            if (character.getMoveSpeed() > maxSpeed)
+                maxSpeed = character.getMoveSpeed();
+
+//            speedLimit = 200 + timePlayed.asSeconds() / 2;
+//            if (abs(character.getMoveSpeed()) > speedLimit) {
+//                if (character.up) {
+//                    character.setMoveSpeed(speedLimit);
+//                }
+//                else character.setMoveSpeed(-speedLimit);
+//            }
+
+            //std::cout << maxSpeed << std::endl;
 
             //sf::Event start;
             //while (window.pollEvent(start)) {
@@ -310,7 +292,7 @@ int main() {
             //distanceText.setString("m: ");
             std::string unit = "m: ";
 //            if (distanceRan > 20000) unit = "km: ";
-            sf::Text distanceText{unit + std::to_string(distanceRan/20), font, 16};
+            sf::Text distanceText{unit + std::to_string(distanceRan/40), font, 20};
     //distanceText.setPosition (0.f, 0.f);
             distanceText.setStyle    (sf::Text::Bold);
             distanceText.setFillColor(sf::Color::White);
@@ -346,41 +328,54 @@ int main() {
                 ////GENERATE OBSTACLES
                 timePlayed = clockPlayed.getElapsedTime();
                 time1 = clock1.getElapsedTime();
-                if (time1.asMilliseconds() > rand()%498+2267 && timePlayed.asSeconds() > 10 && !collided) {
+                timeBefore1 = clockBefore1.getElapsedTime();
+                if (time1.asMilliseconds() > rand()%498+2267 && timePlayed.asSeconds() > 10 && !collided && timeBefore1.asSeconds() > 1.f) {
                     position     = {curve.getXAppend(), curve.getYAppend()};
                     positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
-                    Obstacle obstacle1_(obs1, position, positionNext);
+                    Obstacle obstacle1(obs1, position, positionNext);
                     clock1.restart();
+                    clockBefore2.restart();
+                    clockBefore3.restart();
                 }
 
                 time2 = clock2.getElapsedTime();
-                if (time2.asMilliseconds() > rand()%975+3040 && timePlayed.asSeconds() > 17 && !collided) {
+                timeBefore2 = clockBefore2.getElapsedTime();
+                if (time2.asMilliseconds() > rand()%975+3040 && timePlayed.asSeconds() > 17 && !collided && timeBefore2.asSeconds() > 1.f) {
                     position     = {curve.getXAppend(), curve.getYAppend()};
                     positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
-                    Obstacle obstacle2_(obs2, position, positionNext);
+                    Obstacle obstacle2(obs2, position, positionNext);
                     clock2.restart();
+                    clockBefore1.restart();
+                    clockBefore3.restart();
                 }
 
                 time3 = clock3.getElapsedTime();
-                if (time3.asMilliseconds() > rand()%1000+4373 && timePlayed.asSeconds() > 27 && !collided) {
+                timeBefore3 = clockBefore3.getElapsedTime();
+                if (time3.asMilliseconds() > rand()%1000+4373 && timePlayed.asSeconds() > 27 && !collided && timeBefore3.asSeconds() > 1.f) {
                     position     = {curve.getXAppend(), curve.getYAppend()};
                     positionNext = {curve.getXAppendNext(), curve.getYAppendNext()};
-                    Obstacle obstacle3_(obs3, position, positionNext);
+                    Obstacle obstacle3(obs3, position, positionNext);
                     clock3.restart();
+                    clockBefore1.restart();
+                    clockBefore2.restart();
                 }
 
-                if (Collision::PixelPerfectTest(man, obs1) ||
-                  Collision::PixelPerfectTest(man, obs2) ||
-                  Collision::PixelPerfectTest(man, obs3)) {
-                    //view.setCenter(0, 0);
-                    //character.stop();
-                    collided = true;
-                    //physics.a = 0;
-                    //gmovrTime = gmovrClock.restart();
-                    //std::cout << gmovrTime.asSeconds();
-                    //view.setCenter(0, 0);
-                    //gameOver = true;
+                float darknessMoved = elapsed.asSeconds() * maxSpeed * 4 / 5;
+                if (collided) {
+                    darknessMoved = 20.f;
                 }
+                //if (darknessMoved > 10) darknessMoved = 10.f;
+                //if (darkness_s.getPosition().x > m
+                darkness_s.move(darknessMoved, 0.f);
+                if (darkness_s.getPosition().x >= view.getCenter().x - 500.f)
+                    gameOver = true;
+                if (darkness_s.getPosition().x <  view.getCenter().x - 2000.f)
+                    darkness_s.setPosition(view.getCenter().x-2000.f, -500.f);
+
+                float backgroundMoved = elapsed.asSeconds() * character.getMoveSpeed() / 5;
+                background_s.move(-backgroundMoved, 0.f);
+
+
             }
     //            else if (event.type == sf::Event::KeyPressed)
     //            {
@@ -412,8 +407,9 @@ int main() {
 
 
             //window.setView(view);
-            window.clear(sf::Color(40, 40, 40));
-
+            window.clear(sf::Color(11, 51, 24));
+            //background_s.move(-1.f, 0.f);
+            window.draw(background_s);
 
             if (!gameReady) {
                 if (!gameInstructing)
@@ -440,6 +436,7 @@ int main() {
             //}
 
             window.setView    (view);
+            //window.draw       (background_s);
             window.draw       (curve);
             window.draw       (character);
 
@@ -448,38 +445,26 @@ int main() {
                 window.draw   (obstacle1);
                 window.draw   (obstacle2);
                 window.draw   (obstacle3);
+                window.draw   (darkness_s);
 
             }
+//            if (startRequest)
+//                window.draw(flag_s);
             window.setView(window.getDefaultView());
 
-            if (startRequest)
+            if (startRequest) {
                 window.draw   (distanceText);
+            }
             window.display();
         }//while game is not over
 
 
-        //window.clear(sf::Color::Black);
-        // window.draw            (gmovrM_s);
-        // window.display         ();
+        //window.clear(sf::Color(20,50,80,1));
+        if (gmovrMAlpha < 250) gmovrMAlpha += 2;
+        gmovrM_s.setColor(sf::Color(255, 255, 255, gmovrMAlpha));
+        window.draw            (gmovrM_s);
+        window.display         ();
 
-
-
-
-//        float moveAmount = 0;
-//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-//            moveAmount += character.getMoveSpeed() * elapsed.asSeconds();
-//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-//            moveAmount -= character.getMoveSpeed() * elapsed.asSeconds();
-//        if (moveAmount != 0)
-//        {
-//            view.move(character.move(moveAmount));
-//            curve.syncWithView(view);
-           // curvePointsText.setString("Curve points: " +
-           //                           std::to_string(curve.getPointsCount()));
-           // positionText.setString(
-           //     "Position: " + std::to_string(character.getPosition().x) +
-           //     ", " + std::to_string(character.getPosition().y));
-//        }
 
 
     }//end main loop

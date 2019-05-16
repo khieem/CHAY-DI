@@ -79,7 +79,6 @@ public:
 
     void addMoveSpeed(const float& amount) {
         moveSpeed += amount;
-        if (moveSpeed > 900.f) moveSpeed = 900.f;
     }
 
     float getMoveSpeed() const {

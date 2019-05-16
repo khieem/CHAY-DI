@@ -27,5 +27,5 @@ public:
     static constexpr float PI          = 3.14159265358979323846;
 	static constexpr float DEG_PER_RAD = 180 / PI;
 	static constexpr float RAD_PER_DEG = PI / 180;
-	static constexpr float G           = 500;
+	static constexpr float G           = 400;
 };
