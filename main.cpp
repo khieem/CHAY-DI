@@ -77,6 +77,7 @@ int main() {
     sf::Music startMusic;
     startMusic.openFromFile("start sound.wav");
     startMusic.play();
+    startMusic.setLoop(true);
 
     sf::Music playMusic;
     playMusic.openFromFile("play sound.wav");
