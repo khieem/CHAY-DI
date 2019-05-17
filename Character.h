@@ -101,8 +101,8 @@ public:
         moveSpeed = v;
     }
 
-private:
     sf::Sprite& sprite;
+private:
     float moveSpeed;
     const Curve& curve;
     int segmentIndex;
