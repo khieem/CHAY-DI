@@ -7,10 +7,13 @@
 #include <SFML/Audio.hpp>
 #include <stdlib.h>
 #include <iostream>
+#include <time.h>
 
 int highScore = 0;
 
 int main() {
+    //srand(time(NULL));
+    //int backGroundx = rand()%9990 + 30;
     sf::RenderWindow window(sf::VideoMode(800, 500), "CHAY DI!!!");
     window.setFramerateLimit(60);
 
@@ -18,7 +21,7 @@ int main() {
     background_t.loadFromFile("background.png");
     sf::Sprite background_s;
     background_s.setTexture(background_t);
-    background_s.setPosition(-30.f, 0.f);
+    background_s.setPosition(-30, 0.f);
 
     sf::Texture gmovrM_t;
     gmovrM_t.loadFromFile("gmovr_menu.png");
@@ -401,7 +404,7 @@ int main() {
                     sf::Vector2i localPosition = sf::Mouse::getPosition(window);
                     std::cout << localPosition.x << "   " << localPosition.y << std::endl;
                 }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) gameOver = false;
+                //if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) gameOver = false;
             }
         }
 

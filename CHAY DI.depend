@@ -510,7 +510,7 @@
 	<cmath>
 	<numeric>
 
-1558065037 source:d:\c++\chay-di\main.cpp
+1558080214 source:d:\c++\chay-di\main.cpp
 	"Character.h"
 	"Curve.h"
 	"Obstacle.h"
@@ -520,6 +520,7 @@
 	<SFML/Audio.hpp>
 	<stdlib.h>
 	<iostream>
+	<time.h>
 
 1553928212 source:d:\c++\chay-di\vertexdeque.cpp
 	"VertexDeque.h"
