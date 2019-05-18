@@ -235,9 +235,9 @@ int main() {
                 clockPlayed.restart();
             }
 
-            if (abs(character.getMoveSpeed()) < 30.f && character.getAngle() < 0)
+            if (abs(character.getMoveSpeed()) < 30.f && character.getAngle() < 0 && !collided)
                 character.sprite.setScale(-1, 1);
-            if (abs(character.getMoveSpeed()) < 30.f && character.getAngle() > 0)
+            if (abs(character.getMoveSpeed()) < 30.f && character.getAngle() > 0 && !collided)
                 character.sprite.setScale(1,1);
 
 
